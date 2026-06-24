@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import PostCreate from './components/PostCreate';
+import PostList from './components/PostList';
+import CommentCreate from './components/CommentCreate';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+export default () => {
+    return <div>
+        <section className="py-5 bg-white">
+            <div className="container">
+                <div className="row">
+                    <h1 className='my-3'>Publish New Item</h1>
+                    <PostCreate />
+                </div>
+                <div className="row">
+                    <h1 className='my-3'>Item List</h1>
+                    <PostList />
+                </div>
+            </div>
+        </section>
     </div>
-  );
 }
-
-export default App;
