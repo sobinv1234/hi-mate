@@ -8,10 +8,10 @@ export default ({ postId }) => {
         await axios.post(`http://localhost:4001/posts/${postId}/comments`, { content: comments });
         setComments('');
     }
-    return <div className='card shadow-lg'>
+    return <div className='card shadow-sm'>
                 <div className='card-body'>
                     <form className="form-group" onSubmit={onSubmit}>
-                        <div className="float-left d-flex flex-column">
+                        <div className="float-left d-flex flex-column w-100">
                             <label><i>Offers and Comments</i></label>
                             <textarea className="formControl w-100 my-3 p-2" rows="3" value={comments} 
                             onChange={e => setComments(e.target.value)} placeholder="10% Off if you buy 3 items in-store" />
@@ -20,4 +20,5 @@ export default ({ postId }) => {
                     </form>
                 </div>
             </div>
+            
 }

@@ -1,1 +1,14 @@
 @import url(../components/PostList.scss);
+@import url(../components/commentList.scss);
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.btn.disabled, .btn:disabled, fieldset:disabled .btn {
+    color: var(--bs-btn-disabled-color);
+    pointer-events: none;
+    background-color: #99b3d9 !important;
+    border-color: #7eaef5 !important;
+    opacity: var(--bs-btn-disabled-opacity);
+}

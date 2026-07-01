@@ -16,5 +16,5 @@ export default ({ postId }) => {
     const renderedComments = comments.map((comment) => {
         return <li key={comment.id}>{comment.content}</li>;
     });
-    return <ul>{renderedComments}</ul>;
+    return <ul className='comments-list'>{renderedComments}</ul>;
 };

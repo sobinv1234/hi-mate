@@ -1,0 +1,9 @@
+ul.comments-list{
+    max-height: 71px;
+    overflow-y: auto;
+    line-height: 1rem;
+    font-size: 0.9rem;
+    li{
+        padding: 0.2rem 0;
+    }
+}
