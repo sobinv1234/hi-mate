@@ -43,15 +43,15 @@ const [posts, setPosts] = useState([]);
     }, []);
 
     return (
-        <div className="row">
-        { fetchPosts && <h1 className='my-3'>Item List</h1>}
+        <div className="row my-4">
+        { fetchPosts && <h2 className='mt-3 mb-0'>Item List</h2>}
             {posts.map(post => (
                 <div className="col-6 col-md-3 col-sm-4 my-3 item-list" key={post.id}>
                     <div className='card shadow-md h-100'>
                         <div className='card-body'>
                             <div className="d-flex justify-content-between align-items-center mb-2">
                                 <h5>{post.title}</h5>
-                                <span className="bg-danger shadow-lg rounded-circle p-1 text-white" 
+                                <span className="bg-danger shadow-lg rounded-circle p-2 text-white" 
                                 style={{ fontSize: '0.7rem', width: '1.5rem', padding: '0.5rem', height: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     <button type="button" className="btn-close btn-close-white shadow-none" aria-label="Close"
                                     onClick={() => openDeleteModal(post.id)}

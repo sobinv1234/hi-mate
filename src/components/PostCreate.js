@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import CreatableSelect from 'react-select/creatable';
 import { uploadImage } from '../services/imageService/imageService';
+import { getImage } from '../config/paths';
 import ConfirmModal from '../modals/ConfirmModal';
 
 export default function CreatePost() {
@@ -11,39 +13,144 @@ export default function CreatePost() {
     const [description, setDescription] = useState('');
     const [productAmount, setProductAmount] = useState('');
     const [productImage, setProductImage] = useState('');
+    const [productCategory, setProductCategory] = useState(null);
+    const [productBrand, setProductBrand] = useState('');
 
+    const [categoryOptions, setCategoryOptions] = useState([]);
+    const [errors, setErrors] = useState({});
+
+    // -------------------------
+    // LOAD CATEGORIES
+    // -------------------------
+    useEffect(() => {
+        axios.get("http://localhost:4000/categories")
+            .then(res => {
+                const formatted = res.data.map(c => ({
+                    value: c.name,
+                    label: c.name
+                }));
+                setCategoryOptions(formatted);
+            })
+            .catch(err => console.error(err));
+    }, []);
+
+    // -------------------------
     // IMAGE UPLOAD
+    // -------------------------
     const uploadImageHandler = async (e) => {
         const file = e.target.files[0];
-        const url = await uploadImage(file);
-        setProductImage(url);
+
+        if (!file) return;
+
+        try {
+            const url = await uploadImage(file);
+            setProductImage(url);
+        } catch (err) {
+            console.error("Image upload failed:", err);
+        }
     };
 
-    // SUBMIT FORM
+    // -------------------------
+    // CATEGORY HANDLER
+    // -------------------------
+    const handleCategoryChange = async (selected) => {
+
+        if (!selected) {
+            setProductCategory(null);
+            return;
+        }
+
+        const value = selected.value;
+
+        const exists = categoryOptions.some(
+            opt => opt.value.toLowerCase() === value.toLowerCase()
+        );
+
+        if (!exists) {
+            try {
+                await axios.post("http://localhost:4000/categories", {
+                    name: value
+                });
+
+                setCategoryOptions(prev => [
+                    ...prev,
+                    { value, label: value }
+                ]);
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        setProductCategory(value);
+    };
+
+    // -------------------------
+    // VALIDATION
+    // -------------------------
+    const validate = () => {
+        let err = {};
+
+        if (!title.trim()) {
+            err.title = "Product name is required";
+        }
+
+        if (!productCategory) {
+            err.category = "Category is required";
+        }
+
+        if (!productAmount || Number(productAmount) <= 0) {
+            err.amount = "Valid amount is required";
+        }
+
+        if (!productImage) {
+            err.image = "Product image is required";
+        }
+
+        setErrors(err);
+
+        return Object.keys(err).length === 0;
+    };
+
+    // -------------------------
+    // SUBMIT
+    // -------------------------
     const onSubmit = async (event) => {
         event.preventDefault();
+
+        if (!validate()) return;
 
         try {
             await axios.post('http://localhost:4000/posts', {
                 title,
                 description,
                 productImage,
-                productAmount
+                productAmount,
+                productCategory,
+                productBrand
             });
 
-            // RESET FORM
+            // RESET
             setTitle('');
             setDescription('');
             setProductAmount('');
             setProductImage('');
+            setProductCategory(null);
+            setProductBrand('');
+            setErrors({});
 
-            // SHOW SUCCESS MODAL
             setShowModal(true);
 
         } catch (err) {
-            console.error("Submit error:", err);
+            console.error(err);
         }
     };
+    // validation
+    const isFormValid =
+        title.trim() &&
+        productCategory &&
+        productAmount &&
+        Number(productAmount) > 0;
 
     return (
         <div className="col-12 col-md-8 my-3">
@@ -51,87 +158,107 @@ export default function CreatePost() {
                 <div className='card-body'>
 
                     <form onSubmit={onSubmit}>
+                        <div className="row">
+                            {/* TITLE */}
+                            <div className="col-12 col-md-6 mt-2">
+                                <label>Product Name</label>
+                                <input
+                                    className="form-control mb-1"
+                                    value={title}
+                                    onChange={e => setTitle(e.target.value)}
+                                />
+                                {errors.title && <small className="text-danger">{errors.title}</small>}
+                            </div>
 
-                        <div className="col-12 px-0">
-                            <label className='mb-2'>Product Name</label>
-                            <input
-                                className="formControl w-100 mb-3 p-2"
-                                placeholder='Enter product name'
-                                value={title}
-                                onChange={e => setTitle(e.target.value)}
-                                required
-                            />
-                        </div>
+                            {/* CATEGORY */}
+                            <div className="col-12 col-md-6  mt-2">
+                                <label>Product Category</label>
 
-                        <div className="col-12 px-0">
-                            <div className="row">
-                                <div className="col-6">
-                                    <label className='mb-2'>Product Amount (£)</label>
+                                <CreatableSelect
+                                    options={categoryOptions}
+                                    value={
+                                        productCategory ? { value: productCategory, label: productCategory } : null
+                                    }
+                                    onChange={handleCategoryChange}
+                                    isClearable
+                                    placeholder="Search or create category..."
+                                />
+
+                                {errors.category && (
+                                    <small className="text-danger">{errors.category}</small>
+                                )}
+                            </div>
+
+                            {/* AMOUNT + IMAGE */}
+
+                            <div className="col-6 mt-2">
+                                <label>Amount (£)</label>
+                                <input
+                                    type="number"
+                                    className="form-control mb-1"
+                                    value={productAmount}
+                                    onChange={e => setProductAmount(e.target.value)}
+                                />
+                                {errors.amount && (
+                                    <small className="text-danger">{errors.amount}</small>
+                                )}
+                            </div>
+
+                            <div className="col-6 mt-2">
+                                <div className="d-flex flex-column float-left w-75">
+                                    <label>Image</label>
                                     <input
-                                        className="formControl w-100 mb-3 p-2"
-                                        placeholder="Amount (£)"
-                                        value={productAmount}
-                                        onChange={e => setProductAmount(e.target.value)}
-                                        onBlur={() => {
-                                            if (!productAmount) return;
-                                            setProductAmount(Number(productAmount).toFixed(2));
-                                        }}
-                                        type="number"
-                                        step="0.01"
-                                        min="0"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="col-6">
-                                    <label className="mb-2">Upload Product Image</label>
-                                    <input
-                                        className="form-control"
                                         type="file"
+                                        className="form-control"
                                         accept="image/*"
                                         onChange={uploadImageHandler}
                                     />
                                 </div>
+                                <div className="mt-2 float-right img-fluid product-img-container w-25">
+                                    <img className="img-fluid w-100 pl-3"
+                                        src={productImage || getImage('default-product.jpg')}
+                                        alt="preview"
+                                        style={{ width: 70, marginTop: 10 }}
+                                    />
 
+
+                                    {errors.image && (
+                                        <small className="text-danger">{errors.image}</small>
+                                    )}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="col-12 px-0">
-                            <label className='mb-2'>Description</label>
-                            <textarea
-                                className="formControl w-100 mb-3 p-2"
-                                rows="2"
-                                value={description}
-                                onChange={e => setDescription(e.target.value)}
-                            />
-                        </div>
 
-                        <div className="col-12 px-0">
-                            <button
-                                className="btn btn-primary w-100"
-                                type="submit"
-                                disabled={!title.trim() || !productAmount.trim()}
-                            >
+                            {/* DESCRIPTION */}
+                            <div className="mt-2">
+                                <label>Description</label>
+                                <textarea
+                                    className="form-control"
+                                    value={description}
+                                    onChange={e => setDescription(e.target.value)}
+                                />
+                            </div>
+
+                            {/* SUBMIT */}
+                            <button className="btn btn-primary w-100 mt-3 mt-md-4" disabled={!isFormValid}>
                                 Submit
                             </button>
                         </div>
-
                     </form>
 
                 </div>
             </div>
 
-            {/* ✅ SUCCESS MODAL */}
+            {/* MODAL */}
             <ConfirmModal
                 show={showModal}
-                title="Success  "
+                title="Success"
                 message="Product submitted successfully!"
                 confirmText="OK"
                 cancelText="Close"
                 onConfirm={() => setShowModal(false)}
                 onCancel={() => setShowModal(false)}
             />
-
         </div>
     );
 }

@@ -5,10 +5,10 @@ import CommentCreate from './components/CommentCreate';
 
 export default () => {
     return <div>
-        <section className="py-5 px-2 bg-light">
+        <section className="py-5 px-2 bg-background">
             <div className="container-fluid">
                 <div className="row">
-                    <h1 className='my-3'>Publish New Item</h1>
+                    <h2 className='mt-3 mb-0 publish-txt'>Publish New Item</h2>
                     <PostCreate />
                 </div>
                 <div className="row">
