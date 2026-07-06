@@ -7,6 +7,7 @@
     "@ckeditor/ckeditor5-react": "^11.2.0",
     "@fortawesome/fontawesome-svg-core": "^7.3.0",
     "@fortawesome/react-fontawesome": "^3.3.1",
+    "@react-google-maps/api": "^2.20.8",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -17,6 +18,8 @@
     "bootstrap": "^5.3.8",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-google-places-autocomplete": "^4.1.0",
+    "react-places-autocomplete": "^7.3.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.10.2",
     "web-vitals": "^2.1.4"
