@@ -4,7 +4,16 @@
     overflow: hidden;
     object-fit: cover;
 }
-
+.image-prev{
+    height: 320px;
+    overflow-y: auto;
+}
+@media only screen and (max-width: 600px) {
+    .image-prev{
+        margin: 15px 0;
+        background-color: #f5f7fc;
+    }
+}
 // product list
 .item-list {
     .card {
@@ -22,4 +31,27 @@
             line-height: 1rem;
         }
     }
+    
+}
+.scroll-search-btn {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: #0d6efd;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.scroll-search-btn:hover {
+    transform: translateY(-5px);
+    background: #084298;
 }
