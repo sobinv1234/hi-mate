@@ -70,55 +70,110 @@ app.post('/posts', (req, res) => {
         fax,
         email,
         website,
-        socialMedia,
+        socialLinks,
+        isOpen247,
+    openingHours,
+    timezone,
+    // MAP DATA
+    mapAddress,
+    latitude,
+    longitude,
+    faqs,
+
+    sliderImages,
+    videoUrl,
     } = req.body;
 
-    posts[id] = {
-        id,
-        title,
-        description,
-        productAmount,
-        productImage,
-        productCategory,
-        productBrand,
-        productColor,
-        productSize,
-        productMaterial,
-        productWeight,
-        productDimensions,
-        productStock,
-        productRating,
-        productReviews,
-        productDiscount,
-        productShipping,
-        productReturnPolicy,
-        productWarranty,
-        productSeller,
-        productManufacturer,
-        productReleaseDate,
-        productExpirationDate,
-        productIngredients,
-        productAllergens,
-        productUsageInstructions,
-        productSafetyWarnings,
-        productCertifications,
-        productFeatures,
-        productCompatibility,
-        productAccessories,
-        productBundle,
-        productCustomizations,
-        productPersonalizations,
-        paymentMethods,
-        cardsAccepted,
-        locations,
-        zipCode,
-        phone,
-        phone2,
-        fax,
-        email,
-        website,
-        socialMedia,
-    };
+posts[id] = {
+
+    id,
+
+    title,
+    description,
+
+    productAmount,
+    productImage,
+    productCategory,
+    productBrand,
+
+    productColor,
+    productSize,
+    productMaterial,
+    productWeight,
+
+    productDimensions,
+    productStock,
+    productRating,
+    productReviews,
+
+    productDiscount,
+    productShipping,
+    productReturnPolicy,
+
+    productWarranty,
+    productSeller,
+    productManufacturer,
+
+    productReleaseDate,
+    productExpirationDate,
+
+    productIngredients,
+    productAllergens,
+
+    productUsageInstructions,
+    productSafetyWarnings,
+
+    productCertifications,
+    productFeatures,
+
+    productCompatibility,
+    productAccessories,
+
+    productBundle,
+    productCustomizations,
+    productPersonalizations,
+
+
+    paymentMethods,
+    cardsAccepted,
+
+    locations,
+
+    zipCode,
+
+    phone,
+    phone2,
+    fax,
+
+    email,
+    website,
+
+    socialLinks,
+
+
+    // BUSINESS HOURS
+
+    isOpen247,
+
+    openingHours,
+
+    timezone,
+
+
+    // MAP
+
+    mapAddress,
+
+    latitude: Number(latitude),
+
+    longitude: Number(longitude),
+    faqs,
+
+
+    sliderImages,
+    videoUrl
+
+};
 
     res.status(201).send(posts[id]);
 });
